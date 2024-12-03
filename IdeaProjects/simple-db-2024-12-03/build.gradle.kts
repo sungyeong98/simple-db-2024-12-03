@@ -18,7 +18,7 @@ dependencies {
 
     runtimeOnly("com.mysql:mysql-connector-j:9.1.0")
 
-    testImplementation("org.assertj:assertj-core:3.26.3")
+    testImplementation("org.assertj:assertj-core:3.24.2")
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")

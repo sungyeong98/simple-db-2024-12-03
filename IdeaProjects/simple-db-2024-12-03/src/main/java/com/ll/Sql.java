@@ -41,26 +41,26 @@ public class Sql {
     }
 
     public List<Map<String, Object>> selectRows() {
-        return simpleDb.selectRows(sqlFormat.toString().trim());
+        return simpleDb.selectRows(sqlFormat.toString().trim(), params.toArray());
     }
 
     public Map<String, Object> selectRow() {
-        return simpleDb.selectRow(sqlFormat.toString().trim());
+        return simpleDb.selectRow(sqlFormat.toString().trim(), params.toArray());
     }
 
     public LocalDateTime selectDatetime() {
-        return simpleDb.selectDatetime(sqlFormat.toString().trim());
+        return simpleDb.selectDatetime(sqlFormat.toString().trim(), params.toArray());
     }
 
     public long selectLong() {
-        return simpleDb.selectLong(sqlFormat.toString().trim());
+        return simpleDb.selectLong(sqlFormat.toString().trim(), params.toArray());
     }
 
     public String selectString() {
-        return simpleDb.selectString(sqlFormat.toString().trim());
+        return simpleDb.selectString(sqlFormat.toString().trim(), params.toArray());
     }
 
     public boolean selectBoolean() {
-        return simpleDb.selectBoolean(sqlFormat.toString().trim());
+        return simpleDb.selectBoolean(sqlFormat.toString().trim(), params.toArray());
     }
 }

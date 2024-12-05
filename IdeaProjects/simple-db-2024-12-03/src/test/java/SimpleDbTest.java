@@ -325,7 +325,7 @@ public class SimpleDbTest {
 //
 //        assertThat(count).isEqualTo(3);
 //    }
-//
+
 //    @Test
 //    @DisplayName("appendIn")
 //    public void t013() {
@@ -344,7 +344,7 @@ public class SimpleDbTest {
 //
 //        assertThat(count).isEqualTo(3);
 //    }
-//
+
 //    @Test
 //    @DisplayName("selectLongs, ORDER BY FIELD 사용법")
 //    public void t014() {

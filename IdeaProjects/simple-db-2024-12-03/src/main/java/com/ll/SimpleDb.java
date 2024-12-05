@@ -3,6 +3,9 @@ package com.ll;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class SimpleDb {
@@ -63,6 +66,39 @@ public class SimpleDb {
 
                 if (cls == String.class) {
                     return (T) resultSet.getString(1);
+                } else if (cls == Map.class) {
+                    Map<String, Object> row = new LinkedHashMap<>();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = metaData.getColumnLabel(i);
+                        Object value;
+
+                        switch (metaData.getColumnType(i)) {
+                            case Types.BIGINT:
+                                value = resultSet.getLong(columnName);
+                                break;
+                            case Types.TIMESTAMP:
+                                Timestamp timestamp = resultSet.getTimestamp(columnName);
+                                value = (timestamp != null) ? timestamp.toLocalDateTime() : null;
+                                break;
+                            case Types.BOOLEAN:
+                                value = resultSet.getBoolean(columnName);
+                                break;
+                            default:
+                                value = resultSet.getObject(columnName);
+                                break;
+                        }
+
+                        row.put(columnName, value);
+                    }
+
+                    return (T) row;
+                } else if (cls == LocalDateTime.class) {
+                    return (T) resultSet.getTimestamp(1).toLocalDateTime();
+                } else if (cls == Long.class) {
+                    return (T) (Long) resultSet.getLong(1);
                 } else if (cls == Boolean.class) {
                     return (T) (Boolean) resultSet.getBoolean(1);
                 }
@@ -84,5 +120,17 @@ public class SimpleDb {
 
     public String selectString(String sql) {
         return _run(sql, String.class);
+    }
+
+    public long selectLong(String sql) {
+        return _run(sql, Long.class);
+    }
+
+    public LocalDateTime selectDatetime(String sql) {
+        return _run(sql, LocalDateTime.class);
+    }
+
+    public Map<String, Object> selectRow(String sql) {
+        return _run(sql, Map.class);
     }
 }

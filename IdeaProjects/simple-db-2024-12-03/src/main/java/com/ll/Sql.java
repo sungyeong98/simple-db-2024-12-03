@@ -71,22 +71,15 @@ public class Sql {
     }
 
     public Map<String, Object> selectRow() {
-        return Map.of(
-                "id", 1L,
-                "createdDate", LocalDateTime.now(),
-                "modifiedDate", LocalDateTime.now(),
-                "title", "제목1",
-                "body", "내용1",
-                "isBlind", false
-        );
+        return simpleDb.selectRow(sqlFormat.toString().trim());
     }
 
     public LocalDateTime selectDatetime() {
-        return LocalDateTime.now();
+        return simpleDb.selectDatetime(sqlFormat.toString().trim());
     }
 
     public long selectLong() {
-        return 1L;
+        return simpleDb.selectLong(sqlFormat.toString().trim());
     }
 
     public String selectString() {
@@ -96,5 +89,4 @@ public class Sql {
     public boolean selectBoolean() {
         return simpleDb.selectBoolean(sqlFormat.toString().trim());
     }
-
 }

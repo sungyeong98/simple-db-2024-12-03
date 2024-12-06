@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Sql {
     private final SimpleDb simpleDb;
@@ -18,12 +20,8 @@ public class Sql {
         this.params = new ArrayList<>();
     }
 
-    public String toSql() {
-        return sqlFormat.toString().trim();
-    }
-
     public Sql append(String sqlBit, Object... params) {
-        this.sqlFormat.append(" " + sqlBit);
+        this.sqlFormat.append("\n" + sqlBit);
 
         for (Object param : params) {
             this.params.add(param);
@@ -32,12 +30,26 @@ public class Sql {
         return this;
     }
 
+    public Sql appendIn(String sqlBit, Object... params) {
+        String inClause = IntStream.range(0, params.length)
+                .mapToObj(i -> "?")
+                .collect(Collectors.joining(", "));
+
+        sqlBit = sqlBit.replace("?", inClause);
+
+        return append(sqlBit, params);
+    }
+
+    private String toSql() {
+        return sqlFormat.toString();
+    }
+
     public long insert() {
-        return 1;
+        return simpleDb.insert(toSql(), params.toArray());
     }
 
     public int update() {
-        return 3;
+        return simpleDb.update(toSql(), params.toArray());
     }
 
     public int delete() {
@@ -66,5 +78,18 @@ public class Sql {
 
     public boolean selectBoolean() {
         return simpleDb.selectBoolean(toSql(), params.toArray());
+    }
+
+    public List<Long> selectLongs() {
+        return simpleDb.selectLongs(toSql(), params.toArray());
+    }
+
+    public <T> List<T> selectRows(Class<?> cls) {
+        return simpleDb
+                .selectRows(toSql(), cls, params.toArray());
+    }
+
+    public <T> T selectRow(Class<?> cls) {
+        return simpleDb.selectRow(toSql(), cls, params.toArray());
     }
 }
